@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import pyttsx3
 
 st.set_page_config(page_title="Sim Racing Coach Dashboard", layout="wide")
 st.title("🏎️ Sim Racing Coach - Driver61 Style")
@@ -46,19 +45,11 @@ if ref_file and user_file:
     st.subheader("📊 Coaching Feedback Summary")
     st.dataframe(feedback_df)
 
-    st.subheader("🎙️ Audio Coach Feedback")
-    engine = pyttsx3.init()
-    engine.setProperty('rate', 140)
-    voices = engine.getProperty('voices')
-    british_voice = next((v for v in voices if "english" in v.name.lower()), None)
-    if british_voice:
-        engine.setProperty('voice', british_voice.id)
+    st.subheader("🔈 Audio Coach Feedback (Local Only)")
+    st.info("Voice playback isn't available in this online version. Run the app locally to hear audio feedback.")
 
     for row in feedback:
         st.markdown(f"**{row['corner']}**: {row['feedback']}")
-        if st.button(f"🔊 Play feedback for {row['corner']}"):
-            engine.say(row['feedback'])
-            engine.runAndWait()
 
     st.subheader("📈 Speed, Brake & Throttle Comparison")
     st.line_chart(merged_df[['speed_user', 'speed_ref']].rename(columns={'speed_user': 'User Speed', 'speed_ref': 'Ref Speed'}))
